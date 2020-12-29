@@ -5,132 +5,77 @@
     submitBtnText="Create"
   >
     <template #title>
-      Manage API Tokens
+      Create API Token
     </template>
 
     <template #subtitle>
-      You may delete any of your existing tokens if they are no longer needed.
+      API tokens allow third-party services to authenticate with our application on your behalf.
     </template>
 
-    <!-- API Token List -->
-    <v-list>
-      <v-list-item
-        v-for="token in tokens"
-        :key="token.id"
-        :two-line="token.last_used_at"
+    <!-- Token Name Field -->
+    <v-text-field
+      outlined
+      label="Name"
+      v-model="createApiTokenForm.name"
+      :error-messages="createApiTokenForm.error('name')"
+    ></v-text-field>
+
+    <!-- Token Permissions -->
+    <p class="text-subtitle-1 font-weight-medium">
+      Permissions
+    </p>
+
+    <v-row>
+      <v-col
+        cols="12"
+        md="6"
+        v-for="permission in availablePermissions"
+        :key="permission"
       >
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ token.name }}
-          </v-list-item-title>
+        <v-checkbox
+          dense
+          class="ma-0"
+          v-model="createApiTokenForm.permissions"
+          :label="permission"
+          :value="permission"
+        ></v-checkbox>
+      </v-col>
+    </v-row>
 
-          <v-list-item-title-subtitle
-            v-if="token.last_used_at"
-          >
-            Last used {{ fromNow(token.last_used_at) }}
-          </v-list-item-title-subtitle>
-        </v-list-item-content>
-
-        <v-list-item-action
-          v-if="availablePermissions.length > 0"
-        >
-          <v-btn
-            text
-            @click="manageApiTokenPermissions(token)"
-          >
-            Permissions
-          </v-btn>
-        </v-list-item-action>
-
-        <v-list-item-action>
-          <v-btn
-            text
-            color="error"
-            @click="confirmApiTokenDeletion(token)"
-          >
-            Delete
-          </v-btn>
-        </v-list-item-action>
-      </v-list-item>
-    </v-list>
-
-    <!-- API Token Permissions Modal -->
+    <!-- Token Value Modal -->
     <modal
-      :show="managingPermissionsFor"
-      @close="managingPermissionsFor = null"
+      :show="displayingToken"
+      @close="displayingToken = false"
     >
       <template #title>
-        API Token Permissions
-      </template>
-
-      <template #content>
-        <v-row>
-          <v-col
-            cols="12"
-            md="6"
-            v-for="permission in availablePermissions"
-            :key="permission"
-          >
-            <v-checkbox
-              dense
-              class="ma-0"
-              v-model="createApiTokenForm.permissions"
-              :label="permission"
-              :value="permission"
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-      </template>
-
-      <template #footer>
-        <v-spacer></v-spacer>
-
-        <v-btn
-          text
-          @click.native="managingPermissionsFor = null"
-        >
-          Nevermind
-        </v-btn>
-
-        <v-btn
-          color="primary"
-          @click.native="updateApiToken"
-        >
-          Save
-        </v-btn>
-      </template>
-    </modal>
-
-    <!-- Delete Token Confirmation Modal -->
-    <modal
-      :show="apiTokenBeingDeleted"
-      @close="apiTokenBeingDeleted = null"
-    >
-      <template #title>
-        Delete API Token
+        API Token
       </template>
 
       <template #content>
         <p>
-          Are you sure you would like to delete this API token?
+          Please copy your new API token. For your security, it won't be shown again.
         </p>
+
+        <v-text-field
+          outlined
+          readonly
+          v-if="$page.jetstream.flash.token"
+          ref="new_token"
+          append-icon="mdi-content-copy"
+          :success-messages="tokenSuccessMessage"
+          :value="$page.jetstream.flash.token"
+          @click:append="copyTokenText"
+        ></v-text-field>
       </template>
 
       <template #footer>
         <v-spacer></v-spacer>
 
         <v-btn
-          text
-          @click.native="apiTokenBeingDeleted = null"
+          color="primary"
+          @click.native="displayingToken = false"
         >
-          Nevermind
-        </v-btn>
-
-        <v-btn
-          color="error"
-          @click.native="deleteApiToken"
-        >
-          Delete
+          Close
         </v-btn>
       </template>
     </modal>

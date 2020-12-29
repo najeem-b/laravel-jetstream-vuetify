@@ -90,21 +90,12 @@
 
 <script>
 import FormCard from '../../Components/FormCard'
-
-import JetActionSection from '@/Jetstream/ActionSection'
-import JetButton from '@/Jetstream/Button'
 import ConfirmsPassword from '@/Components/ConfirmsPassword'
-import JetDangerButton from '@/Jetstream/DangerButton'
-import JetSecondaryButton from '@/Jetstream/SecondaryButton'
 
 export default {
   components: {
     ConfirmsPassword,
-    FormCard,
-    JetActionSection,
-    JetButton,
-    JetDangerButton,
-    JetSecondaryButton
+    FormCard
   },
 
   data () {

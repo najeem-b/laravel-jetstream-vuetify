@@ -29,7 +29,8 @@ class JetstreamServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function globalVariables() {
+    private function globalVariables()
+    {
       Inertia::share('appName', config('app.name'));
     }
 
@@ -39,7 +40,8 @@ class JetstreamServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function pageRouteOverwrites() {
+    private function pageRouteOverwrites()
+    {
       Fortify::loginView(function () {
         return Inertia::render('Auth/Login');
       });
@@ -62,6 +64,23 @@ class JetstreamServiceProvider extends ServiceProvider
     }
 
     /**
+     * Jetstream API configuration
+     *
+     * @return void
+     */
+    public function apiConfig ()
+    {
+      Jetstream::defaultApiTokenPermissions(['read']);
+
+      Jetstream::permissions([
+          'create',
+          'read',
+          'update',
+          'delete',
+      ]);
+    }
+
+    /**
      * Bootstrap any application services.
      *
      * @return void
@@ -78,6 +97,7 @@ class JetstreamServiceProvider extends ServiceProvider
 
         $this->pageRouteOverwrites();
         $this->globalVariables();
+        $this->apiConfig();
     }
 
     /**
