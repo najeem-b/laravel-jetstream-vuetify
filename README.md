@@ -1,5 +1,5 @@
 # Laravel Jetstream Vuetify
-A base [Laravel](https://laravel.com/) [Jetstram](https://jetstream.laravel.com/) app built with [Vuetify](https://vuetifyjs.com/) vuetify components.
+A base [Laravel](https://laravel.com/) [Jetstram](https://jetstream.laravel.com/) app built with [Vuetify](https://vuetifyjs.com/) components.
 
 ## Includes
 - [ESLint](https://eslint.org/)
